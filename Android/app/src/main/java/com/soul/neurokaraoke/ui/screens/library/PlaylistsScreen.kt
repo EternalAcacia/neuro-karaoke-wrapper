@@ -67,6 +67,8 @@ import com.soul.neurokaraoke.data.model.Playlist
 import com.soul.neurokaraoke.data.repository.UserPlaylistRepository
 import com.soul.neurokaraoke.ui.theme.GlassCard
 import com.soul.neurokaraoke.ui.theme.GradientText
+import androidx.compose.ui.res.stringResource
+import com.soul.neurokaraoke.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,7 +129,7 @@ fun PlaylistsScreen(
                     IconButton(onClick = onRefresh) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
-                            contentDescription = "Sync playlists",
+                            contentDescription = stringResource(R.string.playlists_content_description_sync),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -139,7 +141,7 @@ fun PlaylistsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "Create playlist"
+                        contentDescription = stringResource(R.string.playlists_content_description_create)
                     )
                 }
             }
@@ -165,13 +167,13 @@ fun PlaylistsScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "No playlists yet",
+                        text = stringResource(R.string.playlists_empty_title),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Tap the + button to create your first playlist",
+                        text = stringResource(R.string.playlists_empty_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         textAlign = TextAlign.Center
@@ -214,13 +216,13 @@ fun PlaylistsScreen(
             onDismissRequest = { playlistToDelete = null },
             title = {
                 Text(
-                    text = "Delete Playlist",
+                    text = stringResource(R.string.playlists_dialog_delete_title),
                     color = MaterialTheme.colorScheme.onSurface
                 )
             },
             text = {
                 Text(
-                    text = "Are you sure you want to delete \"${playlist.title}\"? This action cannot be undone.",
+                    text = stringResource(R.string.playlists_dialog_delete_message, playlist.title),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
@@ -234,14 +236,14 @@ fun PlaylistsScreen(
                         contentColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.playlists_dialog_button_delete))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { playlistToDelete = null }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.playlists_dialog_button_cancel))
                 }
             },
             containerColor = MaterialTheme.colorScheme.surface

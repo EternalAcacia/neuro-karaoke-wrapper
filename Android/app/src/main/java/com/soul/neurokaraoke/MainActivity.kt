@@ -1,5 +1,6 @@
 package com.soul.neurokaraoke
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,14 +12,17 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.soul.neurokaraoke.data.SongCache
+import com.soul.neurokaraoke.data.repository.LocaleManager
 import com.soul.neurokaraoke.data.model.User
 import com.soul.neurokaraoke.ui.MainScreen
 import com.soul.neurokaraoke.ui.components.UpdateDialog
@@ -34,6 +38,10 @@ class MainActivity : ComponentActivity() {
     private val playerViewModel: PlayerViewModel by viewModels()
     private val updateViewModel: UpdateViewModel by viewModels()
     private var isSetupComplete by mutableStateOf(false)
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleManager.wrapContext(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,64 +61,74 @@ class MainActivity : ComponentActivity() {
         handleDeepLink(intent)
 
         setContent {
-            val playerState by playerViewModel.uiState.collectAsState()
-            val updateState by updateViewModel.uiState.collectAsState()
-            val currentSinger = playerState.currentSong?.singer?.name
-            val context = LocalContext.current
+            // Collect current language to trigger recomposition across entire tree
+            val currentLanguage by LocaleManager.currentLanguage.collectAsState()
+            val localizedContext = LocaleManager.wrapContext(LocalContext.current)
 
-            // Check for updates when setup completes
-            LaunchedEffect(isSetupComplete) {
-                if (isSetupComplete) {
-                    updateViewModel.checkForUpdate()
-                }
-            }
+            // key(currentLanguage) forces full recomposition when language changes,
+            // ensuring all stringResource() calls re-evaluate with the new locale.
+            key(currentLanguage) {
+                CompositionLocalProvider(LocalContext provides localizedContext) {
+                    val playerState by playerViewModel.uiState.collectAsState()
+                    val updateState by updateViewModel.uiState.collectAsState()
+                    val currentSinger = playerState.currentSong?.singer?.name
+                    val context = LocalContext.current
 
-            NeuroKaraokeTheme(currentSinger = currentSinger) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    if (!isSetupComplete) {
-                        SetupScreen(
-                            onSetupComplete = {
-                                isSetupComplete = true
-                                // Reload cached songs into ViewModel
-                                playerViewModel.loadCachedSongs()
-                            }
-                        )
-                    } else {
-                        MainScreen(
-                            playerViewModel = playerViewModel,
-                            authViewModel = authViewModel
-                        )
+                    // Check for updates when setup completes
+                    LaunchedEffect(isSetupComplete) {
+                        if (isSetupComplete) {
+                            updateViewModel.checkForUpdate()
+                        }
                     }
 
-                    // Update dialog
-                    if (updateState.showDialog) {
-                        updateState.latestRelease?.let { release ->
-                        UpdateDialog(
-                            release = release,
-                            currentVersion = updateState.currentVersion,
-                            onUpdate = {
-                                updateViewModel.getUpdateIntent()?.let { intent ->
-                                    context.startActivity(intent)
-                                }
-                                updateViewModel.hideDialog()
-                            },
-                            onUninstallAndUpdate = {
-                                // Open download URL first so user can get the new APK
-                                updateViewModel.getUpdateIntent()?.let { intent ->
-                                    context.startActivity(intent)
-                                }
-                                // Then prompt to uninstall current app (fixes signing key conflict)
-                                context.startActivity(updateViewModel.getUninstallIntent())
-                                updateViewModel.hideDialog()
-                            },
-                            onDismiss = {
-                                updateViewModel.dismissUpdate()
+                    NeuroKaraokeTheme(currentSinger = currentSinger) {
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            if (!isSetupComplete) {
+                                SetupScreen(
+                                    onSetupComplete = {
+                                        isSetupComplete = true
+                                        // Reload cached songs into ViewModel
+                                        playerViewModel.loadCachedSongs()
+                                    }
+                                )
+                            } else {
+                                MainScreen(
+                                    playerViewModel = playerViewModel,
+                                    authViewModel = authViewModel
+                                )
                             }
-                        )
-                        } // end latestRelease?.let
+
+                            // Update dialog
+                            if (updateState.showDialog) {
+                                updateState.latestRelease?.let { release ->
+                                UpdateDialog(
+                                    release = release,
+                                    currentVersion = updateState.currentVersion,
+                                    onUpdate = {
+                                        updateViewModel.getUpdateIntent()?.let { intent ->
+                                            context.startActivity(intent)
+                                        }
+                                        updateViewModel.hideDialog()
+                                    },
+                                    onUninstallAndUpdate = {
+                                        // Open download URL first so user can get the new APK
+                                        updateViewModel.getUpdateIntent()?.let { intent ->
+                                            context.startActivity(intent)
+                                        }
+                                        // Then prompt to uninstall current app (fixes signing key conflict)
+                                        context.startActivity(updateViewModel.getUninstallIntent())
+                                        updateViewModel.hideDialog()
+                                    },
+                                    onDismiss = {
+                                        updateViewModel.dismissUpdate()
+                                    }
+                                )
+                                } // end latestRelease?.let
+                            }
+                        }
                     }
                 }
             }
