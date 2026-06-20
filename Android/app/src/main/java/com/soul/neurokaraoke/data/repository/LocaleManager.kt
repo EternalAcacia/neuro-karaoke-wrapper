@@ -47,17 +47,7 @@ object LocaleManager {
         // Async persist via apply()
         prefs?.edit()?.putString(KEY_LANGUAGE, validCode)?.apply()
 
-        // Update the app-level resources Configuration so stringResource() picks up
-        // the new locale without needing Activity.recreate()
-        appContext?.let { ctx ->
-            val locale = getLocaleForCode(validCode)
-            val config = Configuration(ctx.resources.configuration)
-            config.setLocale(locale)
-            @Suppress("DEPRECATION")
-            ctx.resources.updateConfiguration(config, ctx.resources.displayMetrics)
-        }
-
-        // Update StateFlow (triggers Compose recomposition)
+        // Update StateFlow — triggers recreate() in MainActivity via LaunchedEffect
         _currentLanguage.value = validCode
     }
 
