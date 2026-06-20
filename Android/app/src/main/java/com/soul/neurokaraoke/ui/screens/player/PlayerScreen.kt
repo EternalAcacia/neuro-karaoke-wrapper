@@ -100,6 +100,8 @@ import com.soul.neurokaraoke.ui.theme.CyberLabelStyle
 import com.soul.neurokaraoke.ui.theme.gradientBorder
 import com.soul.neurokaraoke.ui.theme.pulsingGlow
 import com.soul.neurokaraoke.viewmodel.RepeatMode
+import androidx.compose.ui.res.stringResource
+import com.soul.neurokaraoke.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -172,13 +174,13 @@ fun PlayerScreen(
             IconButton(onClick = onCollapseClick) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Collapse",
+                    contentDescription = stringResource(R.string.player_content_description_collapse),
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
 
             Text(
-                text = "Now Playing",
+                text = stringResource(R.string.player_title_now_playing),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onBackground
@@ -200,14 +202,14 @@ fun PlayerScreen(
                         isDownloaded -> {
                             Icon(
                                 imageVector = Icons.Default.DownloadDone,
-                                contentDescription = "Downloaded",
+                                contentDescription = stringResource(R.string.player_content_description_downloaded),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
                         else -> {
                             Icon(
                                 imageVector = Icons.Default.Download,
-                                contentDescription = "Download",
+                                contentDescription = stringResource(R.string.player_content_description_download),
                                 tint = MaterialTheme.colorScheme.onBackground
                             )
                         }
@@ -218,7 +220,7 @@ fun PlayerScreen(
                 IconButton(onClick = onAddToPlaylist) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
-                        contentDescription = "Add to playlist",
+                        contentDescription = stringResource(R.string.player_content_description_add_to_playlist),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
@@ -228,7 +230,7 @@ fun PlayerScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             imageVector = Icons.Default.Bedtime,
-                            contentDescription = "Sleep timer",
+                            contentDescription = stringResource(R.string.player_content_description_sleep_timer),
                             tint = if (sleepTimerActive) MaterialTheme.colorScheme.primary
                                    else MaterialTheme.colorScheme.onBackground
                         )
@@ -246,7 +248,7 @@ fun PlayerScreen(
                 IconButton(onClick = { showEqualizer = true }) {
                     Icon(
                         imageVector = Icons.Default.Equalizer,
-                        contentDescription = "Equalizer",
+                        contentDescription = stringResource(R.string.player_content_description_equalizer),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
@@ -304,7 +306,7 @@ fun PlayerScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Brush,
-                    contentDescription = "Art credit",
+                    contentDescription = stringResource(R.string.player_content_description_art_credit),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(14.dp)
                 )
@@ -330,7 +332,7 @@ fun PlayerScreen(
             IconButton(onClick = { showLyrics = true }) {
                 Icon(
                     imageVector = Icons.Default.Lyrics,
-                    contentDescription = "View lyrics",
+                    contentDescription = stringResource(R.string.player_content_description_view_lyrics),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -369,7 +371,7 @@ fun PlayerScreen(
             IconButton(onClick = onToggleFavorite) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                    contentDescription = if (isFavorite) stringResource(R.string.player_content_description_remove_favorite) else stringResource(R.string.player_content_description_add_favorite),
                     tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -409,7 +411,7 @@ fun PlayerScreen(
                 ) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Stop" else "Listen",
+                        contentDescription = if (isPlaying) stringResource(R.string.player_content_description_stop) else stringResource(R.string.player_content_description_listen),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(44.dp)
                     )
@@ -419,7 +421,7 @@ fun PlayerScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = if (isPlaying) "STOP LISTENING" else "LISTEN LIVE",
+                text = if (isPlaying) stringResource(R.string.player_label_stop_listening) else stringResource(R.string.player_label_listen_live),
                 style = CyberLabelStyle,
                 color = if (isPlaying) MaterialTheme.colorScheme.error
                         else MaterialTheme.colorScheme.primary
@@ -475,7 +477,7 @@ fun PlayerScreen(
             IconButton(onClick = onShuffleClick) {
                 Icon(
                     imageVector = Icons.Default.Shuffle,
-                    contentDescription = "Shuffle",
+                    contentDescription = stringResource(R.string.player_content_description_shuffle),
                     tint = if (isShuffleEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -486,7 +488,7 @@ fun PlayerScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.SkipPrevious,
-                    contentDescription = "Previous",
+                    contentDescription = stringResource(R.string.player_content_description_previous),
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(36.dp)
                 )
@@ -513,7 +515,7 @@ fun PlayerScreen(
                 ) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        contentDescription = if (isPlaying) stringResource(R.string.player_content_description_pause) else stringResource(R.string.player_content_description_play),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(40.dp)
                     )
@@ -526,7 +528,7 @@ fun PlayerScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.SkipNext,
-                    contentDescription = "Next",
+                    contentDescription = stringResource(R.string.player_content_description_next),
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(36.dp)
                 )
@@ -538,7 +540,7 @@ fun PlayerScreen(
                         RepeatMode.ONE -> Icons.Default.RepeatOne
                         else -> Icons.Default.Repeat
                     },
-                    contentDescription = "Repeat",
+                    contentDescription = stringResource(R.string.player_content_description_repeat),
                     tint = when (repeatMode) {
                         RepeatMode.OFF -> MaterialTheme.colorScheme.onSurfaceVariant
                         else -> MaterialTheme.colorScheme.primary
@@ -562,7 +564,7 @@ fun PlayerScreen(
                 .height(48.dp)
         ) {
             Text(
-                text = "VIEW QUEUE",
+                text = stringResource(R.string.player_button_view_queue),
                 style = CyberLabelStyle,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -679,7 +681,7 @@ private fun SleepTimerContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Sleep Timer",
+                    text = stringResource(R.string.sleep_timer_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -688,7 +690,7 @@ private fun SleepTimerContent(
             IconButton(onClick = onClose) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Close",
+                    contentDescription = stringResource(R.string.sleep_timer_content_description_close),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -707,7 +709,7 @@ private fun SleepTimerContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Timer Active",
+                    text = stringResource(R.string.sleep_timer_label_active),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.primary
@@ -715,7 +717,7 @@ private fun SleepTimerContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = if (sleepTimerRemainingMs > 0) formatTimerDisplay(sleepTimerRemainingMs)
-                           else "End of current song",
+                           else stringResource(R.string.sleep_timer_label_end_of_song),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -729,13 +731,13 @@ private fun SleepTimerContent(
                     ),
                     shape = RoundedCornerShape(24.dp)
                 ) {
-                    Text("Cancel Timer")
+                    Text(stringResource(R.string.sleep_timer_button_cancel))
                 }
             }
         } else {
             // Timer presets
             Text(
-                text = "Stop playing after",
+                text = stringResource(R.string.sleep_timer_label_stop_after),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -770,7 +772,7 @@ private fun SleepTimerContent(
             FilterChip(
                 selected = false,
                 onClick = onSetEndOfSong,
-                label = { Text("End of current song") },
+                label = { Text(stringResource(R.string.sleep_timer_chip_end_of_song)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Bedtime,
@@ -962,14 +964,14 @@ private fun LyricsContent(
         ) {
             Column {
                 Text(
-                    text = "Lyrics",
+                    text = stringResource(R.string.lyrics_sheet_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 if (isSynced && lyricLines.isNotEmpty()) {
                     Text(
-                        text = "Synced • Tap to seek",
+                        text = stringResource(R.string.lyrics_subtitle_synced),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
                     )
@@ -978,7 +980,7 @@ private fun LyricsContent(
             IconButton(onClick = onClose) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Close",
+                    contentDescription = stringResource(R.string.common_content_description_close),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -992,7 +994,7 @@ private fun LyricsContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Offset:",
+                    text = stringResource(R.string.lyrics_label_offset),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1029,7 +1031,7 @@ private fun LyricsContent(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Searching for lyrics...",
+                            text = stringResource(R.string.lyrics_status_loading),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1059,13 +1061,13 @@ private fun LyricsContent(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "No lyrics found",
+                            text = stringResource(R.string.lyrics_empty_title),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "$songTitle - $artistName",
+                            text = stringResource(R.string.lyrics_empty_subtitle, songTitle, artistName),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             textAlign = TextAlign.Center
@@ -1121,8 +1123,8 @@ private fun LyricsContent(
         // Credit
         Text(
             text = when (lyricsSource) {
-                "neurokaraoke" -> "Lyrics provided by NeuroKaraoke"
-                else -> "Lyrics provided by LRCLIB"
+                "neurokaraoke" -> stringResource(R.string.lyrics_credit_neurokaraoke)
+                else -> stringResource(R.string.lyrics_credit_lrclib)
             },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
@@ -1159,7 +1161,7 @@ private fun QueueContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Queue",
+                text = stringResource(R.string.queue_sheet_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -1167,7 +1169,7 @@ private fun QueueContent(
             IconButton(onClick = onClose) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Close",
+                    contentDescription = stringResource(R.string.common_content_description_close),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -1177,7 +1179,7 @@ private fun QueueContent(
 
         // Now Playing
         Text(
-            text = "Now Playing",
+            text = stringResource(R.string.queue_label_now_playing),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.primary
@@ -1195,7 +1197,7 @@ private fun QueueContent(
 
         // Up Next
         Text(
-            text = "Up Next (${upNext.size} songs)",
+            text = stringResource(R.string.queue_label_up_next, upNext.size),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1205,7 +1207,7 @@ private fun QueueContent(
 
         if (upNext.isEmpty()) {
             Text(
-                text = "No more songs in queue",
+                text = stringResource(R.string.queue_label_empty),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -1279,7 +1281,7 @@ private fun QueueItem(
         if (isPlaying) {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Playing",
+                contentDescription = stringResource(R.string.queue_content_description_playing),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp)
             )
@@ -1317,7 +1319,7 @@ private fun RadioLiveIndicator(isPlaying: Boolean, listenerCount: Int) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "LIVE",
+            text = stringResource(R.string.player_label_live),
             style = CyberLabelStyle,
             color = MaterialTheme.colorScheme.error,
             fontWeight = FontWeight.Bold
@@ -1332,7 +1334,7 @@ private fun RadioLiveIndicator(isPlaying: Boolean, listenerCount: Int) {
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "$listenerCount listening",
+                text = stringResource(R.string.player_label_listening_count, listenerCount),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -1354,7 +1356,7 @@ private fun EqualizerContent(
 ) {
     val eqState by EqualizerManager.state.collectAsState()
     var selectedTab by remember { mutableStateOf(0) }
-    val tabs = listOf("Equalizer", "Bass Boost")
+    val tabs = listOf(stringResource(R.string.equalizer_tab_equalizer), stringResource(R.string.equalizer_tab_bass_boost))
 
     Column(
         modifier = Modifier
@@ -1376,7 +1378,7 @@ private fun EqualizerContent(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Audio Effects",
+                    text = stringResource(R.string.equalizer_sheet_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -1385,7 +1387,7 @@ private fun EqualizerContent(
             IconButton(onClick = onClose) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Close",
+                    contentDescription = stringResource(R.string.common_content_description_close),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -1425,13 +1427,13 @@ private fun EqualizerContent(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Audio effects not available",
+                        text = stringResource(R.string.equalizer_unavailable_title),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Start playing a song to enable",
+                        text = stringResource(R.string.equalizer_unavailable_subtitle),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1458,7 +1460,7 @@ private fun EqualizerTab(eqState: com.soul.neurokaraoke.audio.AudioEffectsState)
     ) {
         if (!eqState.isAvailable) {
             Text(
-                text = "Equalizer not available on this device",
+                text = stringResource(R.string.equalizer_not_available_device),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -1467,7 +1469,7 @@ private fun EqualizerTab(eqState: com.soul.neurokaraoke.audio.AudioEffectsState)
 
         // Enable/Disable toggle
         EffectToggleRow(
-            title = "Enable Equalizer",
+            title = stringResource(R.string.equalizer_toggle_enable),
             checked = eqState.isEnabled,
             onCheckedChange = { EqualizerManager.setEnabled(it) }
         )
@@ -1477,7 +1479,7 @@ private fun EqualizerTab(eqState: com.soul.neurokaraoke.audio.AudioEffectsState)
         // Presets
         if (eqState.presets.isNotEmpty()) {
             Text(
-                text = "Presets",
+                text = stringResource(R.string.equalizer_label_presets),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -1493,7 +1495,7 @@ private fun EqualizerTab(eqState: com.soul.neurokaraoke.audio.AudioEffectsState)
                 FilterChip(
                     selected = eqState.currentPresetIndex == -1,
                     onClick = { EqualizerManager.resetToFlat() },
-                    label = { Text("Flat") },
+                    label = { Text(stringResource(R.string.equalizer_preset_flat)) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = MaterialTheme.colorScheme.primary,
                         selectedLabelColor = MaterialTheme.colorScheme.onPrimary
@@ -1518,7 +1520,7 @@ private fun EqualizerTab(eqState: com.soul.neurokaraoke.audio.AudioEffectsState)
 
         // Band sliders
         Text(
-            text = "Frequency Bands",
+            text = stringResource(R.string.equalizer_label_frequency_bands),
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface

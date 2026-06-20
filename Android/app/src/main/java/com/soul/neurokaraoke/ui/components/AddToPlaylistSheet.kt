@@ -56,6 +56,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.soul.neurokaraoke.data.model.Song
 import com.soul.neurokaraoke.data.repository.UserPlaylistRepository
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.soul.neurokaraoke.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +84,7 @@ fun AddToPlaylistSheet(
         ) {
             // Header
             Text(
-                text = "Add to Playlist",
+                text = stringResource(R.string.add_to_playlist_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -134,7 +137,7 @@ fun AddToPlaylistSheet(
                             }
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = "Create New Playlist",
+                                text = stringResource(R.string.add_to_playlist_create_new),
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.primary
@@ -145,7 +148,7 @@ fun AddToPlaylistSheet(
                     if (playlists.isEmpty()) {
                         item {
                             Text(
-                                text = "No playlists yet. Create one above!",
+                                text = stringResource(R.string.add_to_playlist_empty),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 modifier = Modifier.padding(vertical = 16.dp)
@@ -215,9 +218,9 @@ fun AddToPlaylistSheet(
                                 )
                                 Text(
                                     text = if (alreadyAdded) {
-                                        "Already added"
+                                        stringResource(R.string.add_to_playlist_already_added)
                                     } else {
-                                        "${playlist.songs.size} song${if (playlist.songs.size != 1) "s" else ""}"
+                                        pluralStringResource(R.plurals.playlist_song_count, playlist.songs.size, playlist.songs.size)
                                     },
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
@@ -292,7 +295,7 @@ private fun InlineCreatePlaylist(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Create playlist",
+                text = stringResource(R.string.add_to_playlist_create_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -300,7 +303,7 @@ private fun InlineCreatePlaylist(
             IconButton(onClick = onCancel) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = "Cancel",
+                    contentDescription = stringResource(R.string.add_to_playlist_content_description_cancel),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
@@ -375,7 +378,7 @@ private fun InlineCreatePlaylist(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Make it public",
+                text = stringResource(R.string.add_to_playlist_toggle_public),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -408,7 +411,7 @@ private fun InlineCreatePlaylist(
                 ),
                 shape = RoundedCornerShape(24.dp)
             ) {
-                Text("CREATE & ADD")
+                Text(stringResource(R.string.add_to_playlist_button_create))
             }
         }
 
