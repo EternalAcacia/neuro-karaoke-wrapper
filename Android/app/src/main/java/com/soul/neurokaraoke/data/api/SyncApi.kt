@@ -1,4 +1,4 @@
-package com.soul.neurokaraoke.data.api
+﻿package com.soul.neurokaraoke.data.api
 
 import android.util.Log
 import com.soul.neurokaraoke.data.model.Playlist
@@ -116,10 +116,10 @@ class SyncApi {
      */
     suspend fun addFavorite(accessToken: String, songId: String): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val conn = URL("$API_URL/api/favorites/$songId").openConnection() as HttpURLConnection
-            conn.requestMethod = "POST"
+            val conn = URL("$API_URL/api/user/favorites/$songId").openConnection() as HttpURLConnection
+            conn.requestMethod = "PUT"
             conn.setRequestProperty("Authorization", "Bearer $accessToken")
-            conn.setRequestProperty("Content-Type", "application/json")
+            conn.setRequestProperty("Content-Length", "0")
             conn.connectTimeout = 10000
             conn.readTimeout = 10000
 
@@ -143,7 +143,7 @@ class SyncApi {
      */
     suspend fun removeFavorite(accessToken: String, songId: String): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val conn = URL("$API_URL/api/favorites/$songId").openConnection() as HttpURLConnection
+            val conn = URL("$API_URL/api/user/favorites/$songId").openConnection() as HttpURLConnection
             conn.requestMethod = "DELETE"
             conn.setRequestProperty("Authorization", "Bearer $accessToken")
             conn.connectTimeout = 10000
@@ -192,6 +192,88 @@ class SyncApi {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Fetch playlists error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Create a new user playlist on the server.
+     * Returns the server-assigned UUID as plain text.
+     */
+    suspend fun createPlaylist(accessToken: String, name: String, isPublic: Boolean): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val body = JSONObject()
+                .put("Name", name)
+                .put("IsPublic", isPublic)
+                .put("IsSetList", false)
+                .toString()
+                .toByteArray()
+            val conn = URL("$API_URL/api/playlist/save").openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.setRequestProperty("Authorization", "Bearer $accessToken")
+            conn.setRequestProperty("Content-Type", "application/json")
+            conn.doOutput = true
+            conn.connectTimeout = 10000
+            conn.readTimeout = 10000
+            conn.outputStream.use { it.write(body) }
+            val responseCode = conn.responseCode
+            val responseBody = conn.inputStream.bufferedReader().readText()
+            conn.disconnect()
+            if (responseCode in 200..299 && responseBody.isNotBlank()) {
+                Result.success(responseBody.trim().removeSurrounding("\""))
+            } else {
+                Log.e(TAG, "Create playlist failed ($responseCode)")
+                Result.failure(Exception("HTTP $responseCode"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Create playlist error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Add a song to a user playlist on the server.
+     */
+    suspend fun addSongToPlaylist(accessToken: String, playlistId: String, songId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val conn = URL("$API_URL/api/user/playlists/$playlistId?songId=$songId").openConnection() as HttpURLConnection
+            conn.requestMethod = "PUT"
+            conn.setRequestProperty("Authorization", "Bearer $accessToken")
+            conn.setRequestProperty("Content-Length", "0")
+            conn.connectTimeout = 10000
+            conn.readTimeout = 10000
+            val responseCode = conn.responseCode
+            conn.disconnect()
+            if (responseCode in 200..299) Result.success(Unit)
+            else {
+                Log.e(TAG, "Add song to playlist failed ($responseCode)")
+                Result.failure(Exception("HTTP $responseCode"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Add song to playlist error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Remove a song from a user playlist on the server.
+     */
+    suspend fun removeSongFromPlaylist(accessToken: String, playlistId: String, songId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val conn = URL("$API_URL/api/playlist/$playlistId?songId=$songId").openConnection() as HttpURLConnection
+            conn.requestMethod = "DELETE"
+            conn.setRequestProperty("Authorization", "Bearer $accessToken")
+            conn.connectTimeout = 10000
+            conn.readTimeout = 10000
+            val responseCode = conn.responseCode
+            conn.disconnect()
+            if (responseCode in 200..299) Result.success(Unit)
+            else {
+                Log.e(TAG, "Remove song from playlist failed ($responseCode)")
+                Result.failure(Exception("HTTP $responseCode"))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Remove song from playlist error", e)
             Result.failure(e)
         }
     }
