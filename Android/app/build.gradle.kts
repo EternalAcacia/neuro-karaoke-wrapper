@@ -13,20 +13,25 @@ if (localPropertiesFile.exists()) {
 
 android {
     namespace = "com.soul.neurokaraoke"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.soul.neurokaraoke"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 8
-        versionName = "1.7.0"
+        targetSdk = 35
+        versionCode = 9
+        versionName = "1.7.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // GitHub repo for update checks
         buildConfigField("String", "GITHUB_REPO_OWNER", "\"aferilvt\"")
         buildConfigField("String", "GITHUB_REPO_NAME", "\"neuro-karaoke-wrapper\"")
+
+        // Self-updater toggle. Defaults on (GitHub channel). The Play Store build
+        // passes -PenableUpdater=false so no self-update path ships (Play policy).
+        val updaterEnabled = (project.findProperty("enableUpdater") ?: "true").toString().toBoolean()
+        buildConfigField("boolean", "ENABLE_UPDATER", "$updaterEnabled")
     }
 
     signingConfigs {

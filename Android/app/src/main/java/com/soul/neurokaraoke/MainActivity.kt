@@ -76,8 +76,10 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
 
             // Check for updates when setup completes
+            // Self-updater is GitHub-channel only. Play Store builds set
+            // ENABLE_UPDATER=false (Play policy forbids self-updating APKs).
             LaunchedEffect(isSetupComplete) {
-                if (isSetupComplete) {
+                if (isSetupComplete && BuildConfig.ENABLE_UPDATER) {
                     updateViewModel.checkForUpdate()
                 }
             }
