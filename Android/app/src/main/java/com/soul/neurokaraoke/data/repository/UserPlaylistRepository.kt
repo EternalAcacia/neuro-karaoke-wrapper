@@ -302,7 +302,28 @@ class UserPlaylistRepository(context: Context) {
         try {
             syncApi.fetchUserPlaylists(accessToken).onSuccess { serverPlaylists ->
                 val localOnly = _playlists.value.filter { it.id.startsWith("user_") }
-                _playlists.value = serverPlaylists + localOnly
+                // The list endpoint returns playlist summaries without songs. Merge in
+                // already-loaded songs so a re-sync (e.g. activity recreation after the
+                // app sat in the background) doesn't wipe them from state and disk.
+                val existingById = _playlists.value.associateBy { it.id }
+                val merged = serverPlaylists.map { sp ->
+                    val existing = existingById[sp.id]
+                    when {
+                        // Server sent songs — trust them
+                        sp.songs.isNotEmpty() -> sp
+                        // Nothing cached to preserve
+                        existing == null || existing.songs.isEmpty() -> sp
+                        // Playlist changed remotely — leave empty so detail screen refetches
+                        sp.songCount > 0 && sp.songCount != existing.songs.size -> sp
+                        // Same size (or count unknown) — keep cached songs
+                        else -> sp.copy(
+                            songs = existing.songs,
+                            coverUrl = sp.coverUrl.ifBlank { existing.coverUrl },
+                            previewCovers = sp.previewCovers.ifEmpty { existing.previewCovers }
+                        )
+                    }
+                }
+                _playlists.value = merged + localOnly
                 savePlaylists()
                 Log.d(TAG, "Synced ${serverPlaylists.size} playlists from server, ${localOnly.size} local")
 
